@@ -110,11 +110,11 @@ overall_summary = pd.DataFrame([{ "Employee": "Overall Attendance %", "Office Da
 summary_df = pd.concat([summary_df, overall_summary], ignore_index=True)
 
 # Display updated summary table
-st.subheader("📊 Company-Wide Attendance Summary")
+st.subheader("📊 QET-1 Attendance Summary")
 st.table(summary_df)
 
 # Show total attendance percentage
-st.subheader("📈 Total Company Attendance Percentage")
+st.subheader("📈 Overall Attendance Percentage")
 st.write(f"**Overall Attendance: {company_attendance_percentage:.2f}%**")
 
 # Download attendance report

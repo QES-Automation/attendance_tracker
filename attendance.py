@@ -97,7 +97,7 @@ for employee in employees[1:]:
     if not emp_data.empty and isinstance(emp_data["Dates"].values[0], str):
         attended_dates = emp_data["Dates"].values[0].split(', ')
         office_days = len(attended_dates)
-        percentage = (office_days / 8) * 100 if office_days > 0 else 0
+        percentage = min((office_days / 8) * 100, 100) if office_days > 0 else 0
     else:
         office_days = 0
         percentage = 0

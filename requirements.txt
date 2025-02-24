@@ -1,2 +1,7 @@
+<<<<<<< HEAD
 streamlit
 pandas
+=======
+streamlit
+pandas
+>>>>>>> bdec9a9 (Add Attendance apps)

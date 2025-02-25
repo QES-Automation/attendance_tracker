@@ -107,13 +107,21 @@ for employee in employees[1:]:
     else:
         office_days = 0
         percentage = 0
-    summary_data.append({"Employee": employee, "Office Days": office_days, "Attendance %": f"{percentage:.2f}%"})
+    summary_data.append({
+        "Employee": employee,
+        "Office Days": str(office_days),  # FIXED: Convert to string to avoid Arrow error
+        "Attendance %": f"{percentage:.2f}%"
+    })
 
-summary_df = pd.DataFrame(summary_data)
+# Fix the overall summary row
 company_attendance_percentage = sum(float(entry["Attendance %"].strip('%')) for entry in summary_data) / total_employees if total_employees > 0 else 0
+overall_summary = pd.DataFrame([{
+    "Employee": "Overall Attendance %",
+    "Office Days": "N/A",  # FIXED: Use "N/A" instead of "-"
+    "Attendance %": f"{company_attendance_percentage:.2f}%"
+}])
 
-overall_summary = pd.DataFrame([{ "Employee": "Overall Attendance %", "Office Days": "-", "Attendance %": f"{company_attendance_percentage:.2f}%" }])
-summary_df = pd.concat([summary_df, overall_summary], ignore_index=True)
+summary_df = pd.concat([pd.DataFrame(summary_data), overall_summary], ignore_index=True)
 
 # Display updated summary table
 st.subheader("📊 QET-1 Attendance Summary")

@@ -17,7 +17,7 @@ st.markdown(f"""
 # Define employee list
 employees = [
     "Select Employee", "Balakumar", "Benita Devanesam", "Hari Abinaya M", "Hemanth", "Kishore",
-    "Lavanya K", "Muthuganesh Kumar S", "NandhaGopal E", "Nanthini E", "PavithraDevi",
+    "Lavanya K", "Naga Arjun", "NandhaGopal E", "Nanthini E", "PavithraDevi",
     "Rajagopal B", "Rajalakshmi D", "Rajeswari M", "Sanjay Ram R", "Sendursuriyavel A",
     "Suganya R", "Vidya D", "Nanthini S", "Oviya", "Tharani"
 ]

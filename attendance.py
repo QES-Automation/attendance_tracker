@@ -53,14 +53,20 @@ def load_data():
 df = load_data()
 
 # Employee selection (default to "Select Employee")
-selected_employee = st.selectbox("🧑‍💼 Select Employee", employees, index=0)
+selected_employee = st.selectbox("🧑‍🏢 Select Employee", employees, index=0)
 
 # Ensure an employee is selected before proceeding
 if selected_employee != "Select Employee":
     existing_attendance = df[df["Employee"] == selected_employee]
     selected_dates = existing_attendance["Dates"].values[0].split(', ') if not existing_attendance.empty and isinstance(existing_attendance["Dates"].values[0], str) else []
+    
+    # Attendance selection with "N/A"
+    attendance_options = [str(day) for day in working_days] + ["N/A"]
+    selected_dates = st.multiselect("📌 Select Attendance Dates", attendance_options, default=selected_dates)
 
-    selected_dates = st.multiselect("📌 Select Attendance Dates", [str(day) for day in working_days], default=selected_dates)
+    # If "N/A" is selected, auto-fill all dates with "N/A"
+    if "N/A" in selected_dates:
+        selected_dates = ["N/A"]
 
     if st.button("✅ Update Attendance"):
         if existing_attendance.empty:
@@ -86,7 +92,7 @@ def transform_attendance_data(df, working_days):
 transformed_df = transform_attendance_data(df, working_days)
 
 # Show Full Attendance Record
-st.subheader("📜 Full Attendance Record")
+st.subheader("📛 Full Attendance Record")
 st.dataframe(transformed_df)
 
 # Generate summary
@@ -97,7 +103,7 @@ for employee in employees[1:]:
     if not emp_data.empty and isinstance(emp_data["Dates"].values[0], str):
         attended_dates = emp_data["Dates"].values[0].split(', ')
         office_days = len(attended_dates)
-        percentage = min((office_days / 8) * 100, 100) if office_days > 0 else 0
+        percentage = 100 if "N/A" in attended_dates else min((office_days / 8) * 100, 100)
     else:
         office_days = 0
         percentage = 0
@@ -113,14 +119,7 @@ summary_df = pd.concat([summary_df, overall_summary], ignore_index=True)
 st.subheader("📊 QET-1 Attendance Summary")
 st.table(summary_df)
 
-# Show total attendance percentage
-st.subheader("📈 Overall Attendance Percentage")
-st.write(f"**Overall Attendance: {company_attendance_percentage:.2f}%**")
-
 # Download attendance report
-st.subheader("📥 Download Attendance Report")
-transformed_df["Office Days"] = summary_df["Office Days"].values[:-1]
-transformed_df["Attendance %"] = summary_df["Attendance %"].values[:-1]
+st.subheader("📅 Download Attendance Report")
 csv = transformed_df.to_csv(index=False)
-csv += f"\nOverall Attendance %, {company_attendance_percentage:.2f}%"
 st.download_button("📂 Download CSV", csv, "attendance_report.csv", "text/csv")
